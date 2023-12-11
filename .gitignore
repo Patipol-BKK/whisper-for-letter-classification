@@ -1,0 +1,8 @@
+datasets/
+models/
+wflc_venv/
+whisper_new/
+.ipynb_checkpoints
+__pycache__
+*.npz
+*.npy
