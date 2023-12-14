@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 # print(test_forward)
 
 batch_size = 8
-num_samples = 2
+num_samples = 200
 # Load Dataset
 sloan_letters = ['c', 'd', 'h', 'k', 'n', 'o', 'r', 's', 'v', 'z']
 
@@ -30,7 +30,7 @@ for snr in snr_range:
 	full_dataset = AudioDataset(
 		'datasets/alphadigit_sloans', 
 		'datasets/noise', 
-		snr_range = (0, 0.5),
+		snr_range = (0, snr),
 		selected_labels = sloan_letters, 
 		num_samples = num_samples
 	)
@@ -52,10 +52,16 @@ for snr in snr_range:
 	val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
 	loss = train(wflc_small, train_dataloader, val_dataloader, criterion, optimizer)
+	best_weights = loss[4]
+	loss = loss[:4]
 	print(f'Train Loss: {round(loss[0][-1], 2)}, Train Acc: {round(loss[1][-1], 2)}, Val Loss: {round(loss[2][-1], 2)}, Val Acc: {round(loss[3][-1], 2)}')
 	torch.save({
+			'model_state_dict': best_weights,
+		},f'models/wflc_small_snr{snr}_best.npz')
+
+	torch.save({
 			'model_state_dict': wflc_small.state_dict(),
-		},f'models/wflc_small_snr{snr}.npz')
+		},f'models/wflc_small_snr{snr}_lass.npz')
 
 	np.save(f'models/wflc_small_snr{snr}_losses.npy', np.array(loss, dtype=object), allow_pickle=True)
 
