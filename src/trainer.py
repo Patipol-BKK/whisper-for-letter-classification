@@ -82,18 +82,18 @@ def train(model, train_dataloader, val_dataloader, criterion, optimizer, device=
 		val_accuracies.append(epoch_accuracy)
 
 		pbar.set_postfix({
-	        'Train Loss': train_losses[-1], 
-	        'Train Acc': train_accuracies[-1],
-	        'Val Loss': val_losses[-1],
-	        'Val Acc': val_accuracies[-1],
-	    })
+			'Train Loss': train_losses[-1], 
+			'Train Acc': train_accuracies[-1],
+			'Val Loss': val_losses[-1],
+			'Val Acc': val_accuracies[-1]
+		})
 
-	    if epoch_loss < best_loss:
-	        best_loss = epoch_loss
-	        print(f'Best Loss: {best_loss}, Acc: {epoch_accuracy}')
-	        best_weights = model.state_dict()
+		if epoch_loss < best_loss:
+			best_loss = epoch_loss
+			print(f'Best Loss: {best_loss}, Acc: {epoch_accuracy}')
+			best_weights = model.state_dict()
 
-	    pbar.update(1)
+		pbar.update(1)
 
 	return train_losses, train_accuracies, val_losses, val_accuracies, best_weights
 # def train_cv
