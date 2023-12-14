@@ -6,6 +6,7 @@ from trainer import train
 from torch.utils.data import Dataset, DataLoader
 import torch.optim as optim
 import copy
+import numpy as np
 
 # Import supporting scripts
 from models import ModelUtils, WhisperForLetterClassification
@@ -51,7 +52,7 @@ for snr in snr_range:
 	val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
 	loss = train(wflc_small, train_dataloader, val_dataloader, criterion, optimizer)
-
+	print(f'Train Loss: {round(loss[0], 2)}, Train Acc: {round(loss[1], 2)}, Val Loss: {round(loss[2], 2)}, Val Acc: {round(loss[3], 2)}')
 	torch.save({
 			'model_state_dict': wflc_small.state_dict(),
 		},f'models/wflc_small_snr{snr}.npz')
