@@ -57,13 +57,13 @@ for snr in snr_range:
 	print(f'Train Loss: {round(loss[0][-1], 2)}, Train Acc: {round(loss[1][-1], 2)}, Val Loss: {round(loss[2][-1], 2)}, Val Acc: {round(loss[3][-1], 2)}')
 	torch.save({
 			'model_state_dict': best_weights,
-		},f'models/wflc_small_snr{snr}_best.npz')
+		},f'models/wflc_small_snr{snr}_{num_samples}_best.npz')
 
 	torch.save({
 			'model_state_dict': wflc_small.state_dict(),
-		},f'models/wflc_small_snr{snr}_lass.npz')
+		},f'models/wflc_small_snr{snr}_{num_samples}_last.npz')
 
-	np.save(f'models/wflc_small_snr{snr}_losses.npy', np.array(loss, dtype=object), allow_pickle=True)
+	np.save(f'models/wflc_small_snr{snr}_{num_samples}_losses.npy', np.array(loss, dtype=object), allow_pickle=True)
 
 # loss = eval_model(wflc_small, dataloader, criterion)
 # print(loss)
