@@ -50,7 +50,7 @@ class WhisperForLetterClassification(nn.Module):
 				module = new_embedding
 
 		for param in self.encoder.parameters():
-    		param.requires_grad = False
+			param.requires_grad = False
 
 
 	def _parse_modules(self, whisper, modules):
