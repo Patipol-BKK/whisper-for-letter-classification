@@ -20,19 +20,20 @@ import matplotlib.pyplot as plt
 # print(test_forward)
 
 batch_size = 8
-num_samples = 1000
+num_samples = 200
 # Load Dataset
 sloan_letters = ['c', 'd', 'h', 'k', 'n', 'o', 'r', 's', 'v', 'z']
 
-snr_range = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
+snr_range = [1000, 10, 5, 2, 1, 0.5]
 
 for snr in snr_range:
 	full_dataset = AudioDataset(
 		'datasets/alphadigit_sloans', 
 		'datasets/noise', 
-		snr_range = (0, snr),
+		snr_range = (snr, 1000),
 		selected_labels = sloan_letters, 
-		num_samples = num_samples
+		num_samples = num_samples,
+		augment_num=5
 	)
 	class_weights = full_dataset.class_count/sum(full_dataset.class_count)
 	class_weights=torch.tensor(class_weights,dtype=torch.float).cuda()
@@ -64,9 +65,3 @@ for snr in snr_range:
 		},f'models/wflc_small_snr{snr}_{num_samples}_aug10_last.npz')
 
 	np.save(f'models/wflc_small_snr{snr}_{num_samples}_aug10_losses.npy', np.array(loss, dtype=object), allow_pickle=True)
-
-# loss = eval_model(wflc_small, dataloader, criterion)
-# print(loss)
-# # test_forward = wflc_tiny.forward(torch.unsqueeze(full_dataset[0][0], 0))
-# test_forward = wflc_small.forward(torch.unsqueeze(full_dataset[0][0], 0))
-# # print(test_forward)
