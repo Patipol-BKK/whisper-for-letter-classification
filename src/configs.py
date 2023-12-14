@@ -30,7 +30,7 @@ class WflcConfigs:
 			},
 			'classifier': {
 				'module_list': [
-					'whisper.projector',
+					'whisper.projector', 
 					'whisper.classifier'
 				]
 			}
@@ -47,9 +47,13 @@ class WflcConfigs:
 					'whisper.encoder'
 				]
 			},
+			'projector': {
+				'module_list': [
+					'whisper.projector'
+				]
+			},
 			'classifier': {
 				'module_list': [
-					'whisper.projector',
 					{
 						'name': 'Linear',
 						'kwargs': {
@@ -73,9 +77,13 @@ class WflcConfigs:
 					'whisper.encoder'
 				]
 			},
+			'projector': {
+				'module_list': [
+					'whisper.projector'
+				]
+			},
 			'classifier': {
 				'module_list': [
-					'whisper.projector',
 					{
 						'name': 'Linear',
 						'kwargs': {

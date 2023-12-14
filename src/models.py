@@ -35,6 +35,7 @@ class WhisperForLetterClassification(nn.Module):
 		self.pretrained_whisper = config['pretrained_whisper']
 		whisper = WhisperForAudioClassification.from_pretrained(config['pretrained_whisper'])
 		self.encoder = nn.Sequential(*self._parse_modules(whisper, config['encoder']['module_list']))
+		self.projector = nn.Sequential(*self._parse_modules(whisper, config['projector']['module_list']))
 		self.classifier = nn.Sequential(*self._parse_modules(whisper, config['classifier']['module_list']))
 		for module in self.encoder.named_modules():
 			module_name = module[0]
@@ -75,6 +76,9 @@ class WhisperForLetterClassification(nn.Module):
 
 
 	def forward(self, x):
-		x = self.encoder(x)['last_hidden_state']
-		x = self.classifier(x)
-		return x
+		output = self.encoder(x)['last_hidden_state']
+		output = self.projector(output)
+		pooled_output = output.mean(dim=1)
+
+		pooled_output = self.classifier(pooled_output)
+		return pooled_output
