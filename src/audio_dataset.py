@@ -14,7 +14,7 @@ CUT_OFF = 150
 
 class AudioDataset(Dataset):
 
-	def __init__(self, folder_dir=None, noise_dir=None, snr_range=(0, 0.5), selected_labels=None, num_samples=None):
+	def __init__(self, folder_dir=None, noise_dir=None, snr_range=(0, 0.5), selected_labels=None, num_samples=None, augment_num=10):
 		super().__init__()
 		self.feature_extractor = WhisperFeatureExtractor.from_pretrained('openai/whisper-small')
 
@@ -75,23 +75,28 @@ class AudioDataset(Dataset):
 					sr = 16000
 				data = data.flatten()
 
-				# Add noise
-				if self.has_noise:
-					target_snr = random.uniform(self.snr_range[0], self.snr_range[1])
-					noisy_signal = add_noise(data, self._get_noise(len(data)/sr), target_snr)
+				# Augment Signal
+				for _ in range(augment_num):
+					data_start = np.random.randint(0, len(data) - CUT_OFF)
+					data_slice = noise[data_start:data_start + CUT_OFF]
 
-					data = noisy_signal
+					# Add noise
+					if self.has_noise:
+						target_snr = random.uniform(self.snr_range[0], self.snr_range[1])
+						noisy_signal = add_noise(data_slice, self._get_noise(len(data_slice)/sr), target_snr)
 
-				# Extract audio features
-				features = self.feature_extractor(data, sampling_rate=sr)
-				feature_length = self._feature_end(torch.tensor(features['input_features'][0]))
+						data_slice = noisy_signal
+
+					# Extract audio features
+					features = self.feature_extractor(data_slice, sampling_rate=sr)
+					feature_length = self._feature_end(torch.tensor(features['input_features'][0]))
 				
-				segmented_features = features['input_features'][0][:, :CUT_OFF]
-				self.samples.append({
-					'features': torch.tensor(segmented_features).cuda(),
-					'class_id': torch.tensor(idx).cuda(),
-				})
-				self.class_count[idx] += 1
+					segmented_features = features['input_features'][0][:, :CUT_OFF]
+					self.samples.append({
+						'features': torch.tensor(segmented_features).cuda(),
+						'class_id': torch.tensor(idx).cuda(),
+					})
+					self.class_count[idx] += 1
 		
 		# Process audio files for the remaining labels (this is put into 'others' class)
 		remaining_labels = [x for x in labels if x not in selected_labels]
@@ -124,15 +129,19 @@ class AudioDataset(Dataset):
 
 				# 	data = noisy_signal
 
-				features = self.feature_extractor(data, sampling_rate=sr)
-				feature_length = self._feature_end(torch.tensor(features['input_features'][0]))
-				
-				segmented_features = features['input_features'][0][:, :CUT_OFF]
-				self.samples.append({
-					'features': torch.tensor(segmented_features).cuda(),
-					'class_id': torch.tensor(len(selected_labels)).cuda(),
-				})
-				self.class_count[len(selected_labels)] += 1
+				for _ in range(augment_num):
+					data_start = np.random.randint(0, len(data) - CUT_OFF)
+					data_slice = noise[data_start:data_start + CUT_OFF]
+
+					features = self.feature_extractor(data_slice, sampling_rate=sr)
+					feature_length = self._feature_end(torch.tensor(features['input_features'][0]))
+					
+					segmented_features = features['input_features'][0][:, :CUT_OFF]
+					self.samples.append({
+						'features': torch.tensor(segmented_features).cuda(),
+						'class_id': torch.tensor(len(selected_labels)).cuda(),
+					})
+					self.class_count[len(selected_labels)] += 1
 	def _feature_end(self, feature_tensor):
 	    equal_to_first = torch.all(torch.eq(feature_tensor, feature_tensor[0]), dim=0)
 	    
