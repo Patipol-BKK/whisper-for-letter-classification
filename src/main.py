@@ -54,7 +54,9 @@ for snr in snr_range:
 
 	torch.save({
 			'model_state_dict': wflc_small.state_dict(),
-		},f'wflc_small_snr{snr}.npz')
+		},f'models/wflc_small_snr{snr}.npz')
+
+	np.save(f'models/wflc_small_snr{snr}_losses.npy', np.array(loss, dtype=object), allow_pickle=True)
 
 # loss = eval_model(wflc_small, dataloader, criterion)
 # print(loss)
