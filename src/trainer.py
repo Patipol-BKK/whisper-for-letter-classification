@@ -62,6 +62,11 @@ def eval_model(model, dataloader, criterion, device='cuda:0'):
 	accuracy = corrects / num_items
 	return avg_loss, accuracy
 
+# def eval_files(model, path_list, device='cuda:0'):
+# 	model.eval()
+# 	with torch.no_grad():
+		
+
 def train(model, train_dataloader, val_dataloader, criterion, optimizer, device='cuda:0', epochs=100):
 	best_loss = 1000000
 	best_weights = None
