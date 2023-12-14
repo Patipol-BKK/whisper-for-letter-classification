@@ -117,12 +117,12 @@ class AudioDataset(Dataset):
 					sr = 16000
 				data = data.flatten()
 
-				# Add noise
-				if self.has_noise:
-					target_snr = random.uniform(self.snr_range[0], self.snr_range[1])
-					noisy_signal = add_noise(data, self._get_noise(len(data)/sr), target_snr)
+				# # Add noise
+				# if self.has_noise:
+				# 	target_snr = random.uniform(self.snr_range[0], self.snr_range[1])
+				# 	noisy_signal = add_noise(data, self._get_noise(len(data)/sr), target_snr)
 
-					data = noisy_signal
+				# 	data = noisy_signal
 
 				features = self.feature_extractor(data, sampling_rate=sr)
 				feature_length = self._feature_end(torch.tensor(features['input_features'][0]))
