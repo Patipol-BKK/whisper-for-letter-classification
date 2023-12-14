@@ -18,7 +18,7 @@ def add_noise(signal, noise, snr, length):
 		# Scale the noise to achieve the desired SNR
 		scaled_noise = np.sqrt(target_noise_pwr / noise_pwr) * noise_slice
 
-		if len(scaled_noise) > signal:
+		if len(scaled_noise) > len(signal):
 			noisy_signal = scaled_noise
 			noisy_signal[:len(signal)] += signal
 		else:
