@@ -65,7 +65,7 @@ class AudioDataset(Dataset):
 			selected_audio_files = random.sample(list(os.listdir(label_folder_path)), num_samples_local)
 
 			# Process audio for each classes
-			for selected_audio_file in selected_audio_files:
+			for selected_audio_file in tqdm(selected_audio_files, desc=f'Loading {selected_label}'):
 				file_path = os.path.join(label_folder_path, selected_audio_file)
 				data, sr = sf.read(file_path)
 				
@@ -112,7 +112,7 @@ class AudioDataset(Dataset):
 			
 			selected_audio_files = random.sample(list(os.listdir(label_folder_path)), num_samples_local)
 
-			for selected_audio_file in selected_audio_files:
+			for selected_audio_file in tqdm(selected_audio_files, desc=f'Loading {remaining_label}'):
 				file_path = os.path.join(label_folder_path, selected_audio_file)
 				data, sr = sf.read(file_path)
 				
