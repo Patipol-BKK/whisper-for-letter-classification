@@ -3,6 +3,7 @@ import numpy as np
 def signal_power(signal):
 	return np.mean(signal ** 2)
 
+
 def add_noise(signal, noise, snr):
 	# Randomly choose where to slice the noise sample
 	noise_start = np.random.randint(0, len(noise) - len(signal))
