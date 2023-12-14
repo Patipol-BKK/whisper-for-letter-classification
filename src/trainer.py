@@ -63,12 +63,16 @@ def eval_model(model, dataloader, criterion, device='cuda:0'):
 	return avg_loss, accuracy
 
 def train(model, train_dataloader, val_dataloader, criterion, optimizer, device='cuda:0', epochs=100):
+	best_loss = 1000000
+	best_weights = None
+
 	train_losses = []
 	train_accuracies = []
 
 	val_losses = []
 	val_accuracies = []
-	for epoch in tqdm(range(epochs), desc='Training Model'):
+	pbar = tqdm(total=epochs, desc='Training')
+	for epoch in range(epochs):
 		epoch_loss, epoch_accuracy = train_1epoch(model, train_dataloader, criterion, optimizer, device)
 		train_losses.append(epoch_loss)
 		train_accuracies.append(epoch_accuracy)
@@ -77,5 +81,19 @@ def train(model, train_dataloader, val_dataloader, criterion, optimizer, device=
 		val_losses.append(epoch_loss)
 		val_accuracies.append(epoch_accuracy)
 
-	return train_losses, train_accuracies, val_losses, val_accuracies
+		pbar.set_postfix({
+	        'Train Loss': train_losses[-1], 
+	        'Train Acc': train_accuracies[-1],
+	        'Val Loss': val_losses[-1],
+	        'Val Acc': val_accuracies[-1],
+	    })
+
+	    if epoch_loss < best_loss:
+	        best_loss = epoch_loss
+	        print(f'Best Loss: {best_loss}, Acc: {epoch_accuracy}')
+	        best_weights = model.state_dict()
+
+	    pbar.update(1)
+
+	return train_losses, train_accuracies, val_losses, val_accuracies, best_weights
 # def train_cv
