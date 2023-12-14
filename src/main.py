@@ -52,7 +52,7 @@ for snr in snr_range:
 	val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
 	loss = train(wflc_small, train_dataloader, val_dataloader, criterion, optimizer)
-	print(f'Train Loss: {round(loss[0], 2)}, Train Acc: {round(loss[1], 2)}, Val Loss: {round(loss[2], 2)}, Val Acc: {round(loss[3], 2)}')
+	print(f'Train Loss: {round(loss[0][-1], 2)}, Train Acc: {round(loss[1][-1], 2)}, Val Loss: {round(loss[2][-1], 2)}, Val Acc: {round(loss[3][-1], 2)}')
 	torch.save({
 			'model_state_dict': wflc_small.state_dict(),
 		},f'models/wflc_small_snr{snr}.npz')
