@@ -23,7 +23,7 @@ num_samples = 2
 # Load Dataset
 sloan_letters = ['c', 'd', 'h', 'k', 'n', 'o', 'r', 's', 'v', 'z']
 
-snr_range = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
+snr_range = [0.1, 0.2, 0.3, 0.4, 0.5]
 
 for snr in snr_range:
 	full_dataset = AudioDataset(
