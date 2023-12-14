@@ -4,10 +4,10 @@ def signal_power(signal):
 	return np.mean(signal ** 2)
 
 
-def add_noise(signal, noise, snr):
+def add_noise(signal, noise, snr, length):
 	# Randomly choose where to slice the noise sample
 	noise_start = np.random.randint(0, len(noise) - len(signal))
-	noise_slice = noise[noise_start:noise_start + len(signal)]
+	noise_slice = noise[noise_start:noise_start + length]
 
 	signal_pwr = signal_power(signal)	
 	noise_pwr = signal_power(noise)
@@ -18,8 +18,10 @@ def add_noise(signal, noise, snr):
 		# Scale the noise to achieve the desired SNR
 		scaled_noise = np.sqrt(target_noise_pwr / noise_pwr) * noise_slice
 
+		noisy_signal = scaled_noise
+
 		# Add the scaled noise to the signal
-		noisy_signal = signal + scaled_noise
+		noisy_signal[:len(signal)] += signal
 	else:
 		return signal
 

@@ -77,15 +77,14 @@ class AudioDataset(Dataset):
 
 				# Augment Signal
 				for _ in range(augment_num):
-					data_start = np.random.randint(0, len(data) - CUT_OFF)
-					data_slice = data[data_start:data_start + CUT_OFF]
-
 					# Add noise
 					if self.has_noise:
 						target_snr = random.uniform(self.snr_range[0], self.snr_range[1])
-						noisy_signal = add_noise(data_slice, self._get_noise(len(data_slice)/sr), target_snr)
+						noisy_signal = add_noise(data, self._get_noise(CUT_OFF/100), target_snr, int(CUT_OFF/100*16000))
 
 						data_slice = noisy_signal
+					else:
+						data_slice = data
 
 					# Extract audio features
 					features = self.feature_extractor(data_slice, sampling_rate=sr)
@@ -130,8 +129,8 @@ class AudioDataset(Dataset):
 				# 	data = noisy_signal
 
 				for _ in range(augment_num):
-					data_start = np.random.randint(0, len(data) - CUT_OFF)
-					data_slice = data[data_start:data_start + CUT_OFF]
+					data_start = np.random.randint(0, len(data) - CUT_OFF*sr)
+					data_slice = data[data_start:data_start + CUT_OFF*sr]
 
 					features = self.feature_extractor(data_slice, sampling_rate=sr)
 					feature_length = self._feature_end(torch.tensor(features['input_features'][0]))
