@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 # print(test_forward)
 
 batch_size = 8
-num_samples = 2
+num_samples = 200
 # Load Dataset
 sloan_letters = ['c', 'd', 'h', 'k', 'n', 'o', 'r', 's', 'v', 'z']
 
