@@ -24,7 +24,7 @@ num_samples = 500
 # Load Dataset
 sloan_letters = ['c', 'd', 'h', 'k', 'n', 'o', 'r', 's', 'v', 'z']
 
-snr_range = [0.5]
+snr_range = [2]
 
 for snr in snr_range:
 	full_dataset = AudioDataset(
@@ -35,15 +35,6 @@ for snr in snr_range:
 		num_samples = num_samples,
 		augment_num=5
 	)
-
-	# local_dataset = AudioDataset(
-	# 	'datasets/local_sloans', 
-	# 	'datasets/noise', 
-	# 	snr_range = (snr, 1000),
-	# 	selected_labels = sloan_letters, 
-	# 	num_samples = num_samples,
-	# 	augment_num=5
-	# )
 
 	class_weights = full_dataset.class_count/sum(full_dataset.class_count)
 	class_weights=torch.tensor(class_weights,dtype=torch.float).cuda()
