@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 # print(test_forward)
 
 batch_size = 8
-num_samples = 1
+num_samples = 500
 # Load Dataset
 sloan_letters = ['c', 'd', 'h', 'k', 'n', 'o', 'r', 's', 'v', 'z']
 
@@ -59,10 +59,10 @@ for snr in snr_range:
 	print(f'Train Loss: {round(loss[0][-1], 2)}, Train Acc: {round(loss[1][-1], 2)}, Val Loss: {round(loss[2][-1], 2)}, Val Acc: {round(loss[3][-1], 2)}')
 	torch.save({
 			'model_state_dict': best_weights,
-		},f'models/wflc_tiny_snr{snr}_{num_samples}_aug10_nofreeze_best.npz')
+		},f'models/wflc_tiny_snr{snr}_{num_samples}_aug10_best.npz')
 
 	torch.save({
 			'model_state_dict': wflc_small.state_dict(),
-		},f'models/wflc_tiny_snr{snr}_{num_samples}_aug10_nofreeze_last.npz')
+		},f'models/wflc_tiny_snr{snr}_{num_samples}_aug10_last.npz')
 
-	np.save(f'models/wflc_tiny_snr{snr}_{num_samples}_aug10_nofreeze_losses.npy', np.array(loss, dtype=object), allow_pickle=True)
+	np.save(f'models/wflc_tiny_snr{snr}_{num_samples}_aug10_losses.npy', np.array(loss, dtype=object), allow_pickle=True)
