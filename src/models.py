@@ -49,8 +49,8 @@ class WhisperForLetterClassification(nn.Module):
 				new_embedding.weight.data.copy_(original_embedding_weights[:in_channels, :])
 				module = new_embedding
 
-		for param in self.encoder.parameters():
-			param.requires_grad = False
+		# for param in self.encoder.parameters():
+		# 	param.requires_grad = False
 
 
 	def _parse_modules(self, whisper, modules):
@@ -85,3 +85,12 @@ class WhisperForLetterClassification(nn.Module):
 
 		pooled_output = self.classifier(pooled_output)
 		return pooled_output
+
+	# def _window_segments(self, x):
+
+
+	# def inference(self, x):
+		
+
+
+	# def inference_streaming(self, x):
