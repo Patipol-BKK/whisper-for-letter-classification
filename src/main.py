@@ -43,7 +43,7 @@ for snr in snr_range:
 	val_size = len(full_dataset) - train_size
 	train_dataset, val_dataset = torch.utils.data.random_split(full_dataset, [train_size, val_size])
 
-	wflc_small_config = WflcConfigs.get_config('wflc_small')
+	wflc_small_config = WflcConfigs.get_config('wflc_tiny')
 	wflc_small = WhisperForLetterClassification(wflc_small_config)
 	wflc_small = wflc_small.to(device='cuda:0')
 
@@ -59,10 +59,10 @@ for snr in snr_range:
 	print(f'Train Loss: {round(loss[0][-1], 2)}, Train Acc: {round(loss[1][-1], 2)}, Val Loss: {round(loss[2][-1], 2)}, Val Acc: {round(loss[3][-1], 2)}')
 	torch.save({
 			'model_state_dict': best_weights,
-		},f'models/wflc_small_snr{snr}_{num_samples}_aug10_nofreeze_best.npz')
+		},f'models/wflc_tiny_snr{snr}_{num_samples}_aug10_nofreeze_best.npz')
 
 	torch.save({
 			'model_state_dict': wflc_small.state_dict(),
-		},f'models/wflc_small_snr{snr}_{num_samples}_aug10_nofreeze_last.npz')
+		},f'models/wflc_tiny_snr{snr}_{num_samples}_aug10_nofreeze_last.npz')
 
-	np.save(f'models/wflc_small_snr{snr}_{num_samples}_aug10_nofreeze_losses.npy', np.array(loss, dtype=object), allow_pickle=True)
+	np.save(f'models/wflc_tiny_snr{snr}_{num_samples}_aug10_nofreeze_losses.npy', np.array(loss, dtype=object), allow_pickle=True)
