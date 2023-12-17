@@ -65,4 +65,4 @@ for snr in snr_range:
 			'model_state_dict': wflc_small.state_dict(),
 		},f'models/wflc_tiny_snr{snr}_{num_samples}_aug10_last.npz')
 
-	np.save(f'models/wflc_tiny_snr{snr}_{num_samples}_aug10__losses.npy', np.array(loss, dtype=object), allow_pickle=True)
+	np.save(f'models/wflc_tiny_snr{snr}_{num_samples}_aug10_losses.npy', np.array(loss, dtype=object), allow_pickle=True)
