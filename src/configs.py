@@ -94,6 +94,36 @@ class WflcConfigs:
 					}
 				]
 			}
+		},
+		'wflc_base': {
+			'model_name': 'WhisperForLetterClassification_Base',
+			'pretrained_whisper': 'openai/whisper-base',
+			'audio_config': {
+				'sample_rate': 16000,
+				'window_length': 1500 # 1500ms Window
+			},
+			'encoder': {
+				'module_list': [
+					'whisper.encoder'
+				]
+			},
+			'projector': {
+				'module_list': [
+					'whisper.projector'
+				]
+			},
+			'classifier': {
+				'module_list': [
+					{
+						'name': 'Linear',
+						'kwargs': {
+							'in_features': 256,
+							'out_features': 11,
+							'bias': True
+						}
+					}
+				]
+			}
 		}
 	}
 
