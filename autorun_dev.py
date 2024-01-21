@@ -26,7 +26,7 @@ class FileChangeHandler(FileSystemEventHandler):
 
 if __name__ == '__main__':
     working_dir = 'src'
-    script_path = 'src\\main.py'  # Replace with your script path
+    script_path = 'src\\dev.py'  # Replace with your script path
     event_handler = FileChangeHandler(working_dir, script_path)
     observer = Observer()
     observer.schedule(event_handler, path=".", recursive=True)
